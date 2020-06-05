@@ -1,41 +1,70 @@
-plugins {
-    id 'java'
-    id 'io.quarkus'
+buildscript {
+  repositories {
+    jcenter()
+  }
+  dependencies {
+    classpath "com.commercehub.gradle.plugin:gradle-avro-plugin:0.19.1"
+  }
 }
 
+plugins {
+  id 'java'
+  id 'io.quarkus'
+  id 'idea'
+}
+
+// Avro generator
+apply plugin: "com.commercehub.gradle.plugin.avro"
+
+
+
 repositories {
-     mavenLocal()
-     mavenCentral()
+  mavenLocal()
+  mavenCentral()
+  maven {
+    url "https://packages.confluent.io/maven/"
+  }
 }
 
 dependencies {
-    implementation 'io.quarkus:quarkus-kafka-streams'
-    implementation 'io.quarkus:quarkus-kafka-client'
-    implementation 'org.apache.camel.quarkus:camel-quarkus-kafka'
-    implementation enforcedPlatform("${quarkusPlatformGroupId}:${quarkusPlatformArtifactId}:${quarkusPlatformVersion}")
-    implementation 'io.quarkus:quarkus-resteasy'
+  implementation 'io.quarkus:quarkus-kafka-streams'
+  implementation 'io.quarkus:quarkus-kafka-client'
+  implementation 'org.apache.camel.quarkus:camel-quarkus-kafka'
+  implementation enforcedPlatform("${quarkusPlatformGroupId}:${quarkusPlatformArtifactId}:${quarkusPlatformVersion}")
+  implementation 'io.quarkus:quarkus-resteasy'
 
-    testImplementation 'io.quarkus:quarkus-junit5'
-    testImplementation 'io.rest-assured:rest-assured'
+  implementation group: 'org.apache.avro', name: 'avro', version: '1.9.2'
+
+  testImplementation 'io.quarkus:quarkus-junit5'
+  testImplementation 'io.rest-assured:rest-assured'
+
+  // Schema registry
+  implementation group: 'io.confluent', name: 'kafka-avro-serializer', version: '5.5.0'
+  implementation group: 'io.confluent', name: 'kafka-streams-avro-serde', version: '5.5.0'
 }
-
 group 'net.explorviz'
 version '1.0.0-SNAPSHOT'
 
 compileJava {
-    options.encoding = 'UTF-8'
-    options.compilerArgs << '-parameters'
+  options.encoding = 'UTF-8'
+  options.compilerArgs << '-parameters'
 }
 
 compileTestJava {
-    options.encoding = 'UTF-8'
+  options.encoding = 'UTF-8'
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_11
-    targetCompatibility = JavaVersion.VERSION_11
+  sourceCompatibility = JavaVersion.VERSION_11
+  targetCompatibility = JavaVersion.VERSION_11
 }
 
 test {
-    systemProperty "java.util.logging.manager", "org.jboss.logmanager.LogManager"
+  systemProperty "java.util.logging.manager", "org.jboss.logmanager.LogManager"
+}
+
+idea {
+  module {
+    downloadJavadoc = true
+  }
 }

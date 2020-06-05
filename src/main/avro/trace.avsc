@@ -1,0 +1,108 @@
+{
+  "namespace": "net.explorviz.trace",
+  "type": "record",
+  "name": "Trace",
+  "fields": [
+    {
+      "name": "traceId",
+      "type": "string"
+    },
+    {
+      "name": "startTime",
+      "type": {
+        "type": "record",
+        "name": "Timestamp",
+        "fields": [
+          {
+            "name": "seconds",
+            "type": "long"
+          },
+          {
+            "name": "nanoAdjust",
+            "type": "int"
+          }
+        ]
+      }
+    },
+    {
+      "name": "endTime",
+      "type": "long"
+    },
+    {
+      "name": "duration",
+      "type": "long"
+    },
+    {
+      "name": "overallRequestCount",
+      "type": "int"
+    },
+    {
+      "name": "traceCount",
+      "type": "int"
+    },
+    {
+      "name": "spanList",
+      "type": {
+        "type": "array",
+        "items": {
+          "name": "EVSpan",
+          "type": "record",
+          "fields": [
+            {
+              "name": "spanId",
+              "type": "string"
+            },
+            {
+              "name": "landscapeToken",
+              "type": "string"
+            },
+            {
+              "name": "traceId",
+              "type": "string"
+            },
+            {
+              "name": "startTime",
+              "type": "net.explorviz.trace.Timestamp"
+            },
+            {
+              "name": "endTime",
+              "type": "long"
+            },
+            {
+              "name": "duration",
+              "type": "long"
+            },
+            {
+              "name": "operationName",
+              "type": "string"
+            },
+            {
+              "name": "requestCount",
+              "type": "int"
+            },
+            {
+              "name": "hostname",
+              "type": "string"
+            },
+            {
+              "name": "hostIpAddress",
+              "type": "string"
+            },
+            {
+              "name": "appName",
+              "type": "string"
+            },
+            {
+              "name": "appPid",
+              "type": "string"
+            },
+            {
+              "name": "appLanguage",
+              "type": "string"
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

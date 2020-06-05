@@ -1,0 +1,50 @@
+{
+  "namespace": "net.explorviz.landscape.flat",
+  "type": "record",
+  "name": "LandscapeRecord",
+  "fields": [
+    {
+      "name": "landscapeToken",
+      "type": "string"
+    },
+    {
+      "name": "timestamp",
+      "type": "long"
+    },
+    {
+      "name": "node",
+      "type": {
+        "name": "Node",
+        "type": "record",
+        "fields": [
+          {"name": "ipAddress", "type": "string"},
+          {"name": "hostName", "type": "string"}
+        ]
+      }
+    },
+    {
+      "name": "application",
+      "type": {
+        "name": "Application",
+        "type": "record",
+        "fields": [
+          {"name": "name", "type": "string"},
+          {"name": "pid", "type": "string"},
+          {"name": "language", "type": "string", "default": "java"}
+        ]
+      }
+    },
+    {
+      "name": "package",
+      "type": "string"
+    },
+    {
+      "name": "class",
+      "type": "string"
+    },
+    {
+      "name": "method",
+      "type": "string"
+    }
+  ]
+}
