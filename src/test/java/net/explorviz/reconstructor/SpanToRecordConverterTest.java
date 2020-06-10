@@ -60,7 +60,7 @@ class SpanToRecordConverterTest {
   }
 
   @Test
-  public void convert()  {
+  public void convert() {
     LandscapeRecord got = converter.toRecord(span);
     Assertions.assertEquals(got, record, "Converted records does not match expected");
   }

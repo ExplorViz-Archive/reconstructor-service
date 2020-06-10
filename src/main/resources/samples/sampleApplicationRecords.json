@@ -1,0 +1,162 @@
+[
+  {
+    "landscapeToken": "samplelandscape",
+    "timestamp": "1590231993321",
+    "node": {
+      "ipAddress": "1.2.3.4",
+      "hostName": "testhost"
+    },
+    "application": {
+      "name": "UNKNOWN-APPLICATION",
+      "pid": "1234",
+      "language": "java"
+    },
+    "package$": "net.explorviz.sampleApplication.database.helper",
+    "class$": "SQLConnectionHandler",
+    "method": "createDatabase"
+  },
+  {
+    "landscapeToken": "samplelandscape",
+    "timestamp": "1590231993322",
+    "node": {
+      "ipAddress": "1.2.3.4",
+      "hostName": "testhost"
+    },
+    "application": {
+      "name": "UNKNOWN-APPLICATION",
+      "pid": "1234",
+      "language": "java"
+    },
+    "package$": "net.explorviz.sampleApplication",
+    "class$": "Main$DatabaseTask",
+    "method": "run"
+  },
+  {
+    "landscapeToken": "samplelandscape",
+    "timestamp": "1590231993322",
+    "node": {
+      "ipAddress": "1.2.3.4",
+      "hostName": "testhost"
+    },
+    "application": {
+      "name": "UNKNOWN-APPLICATION",
+      "pid": "1234",
+      "language": "java"
+    },
+    "package$": "net.explorviz.sampleApplication.database.helper",
+    "class$": "SQLStatementHandler",
+    "method": "executeStatementHandler"
+  },
+  {
+    "landscapeToken": "samplelandscape",
+    "timestamp": "1590231993323",
+    "node": {
+      "ipAddress": "1.2.3.4",
+      "hostName": "testhost"
+    },
+    "application": {
+      "name": "UNKNOWN-APPLICATION",
+      "pid": "1234",
+      "language": "java"
+    },
+    "package$": "net.explorviz.sampleApplication.database.helper",
+    "class$": "SQLConnectionHandler",
+    "method": "connect"
+  },
+  {
+    "landscapeToken": "samplelandscape",
+    "timestamp": "1590231993326",
+    "node": {
+      "ipAddress": "1.2.3.4",
+      "hostName": "testhost"
+    },
+    "application": {
+      "name": "UNKNOWN-APPLICATION",
+      "pid": "1234",
+      "language": "java"
+    },
+    "package$": "net.explorviz.sampleApplication.database.helper",
+    "class$": "SQLConnectionHandler",
+    "method": "disconnect"
+  },
+  {
+    "landscapeToken": "samplelandscape",
+    "timestamp": "1590232993321",
+    "node": {
+      "ipAddress": "1.2.3.4",
+      "hostName": "testhost"
+    },
+    "application": {
+      "name": "UNKNOWN-APPLICATION",
+      "pid": "1234",
+      "language": "java"
+    },
+    "package$": "net.explorviz.sampleApplication.util",
+    "class$": "RandomNumberGenerator",
+    "method": "getRandomNumber"
+  },
+  {
+    "landscapeToken": "samplelandscape",
+    "timestamp": "1590232993350",
+    "node": {
+      "ipAddress": "1.2.3.4",
+      "hostName": "testhost"
+    },
+    "application": {
+      "name": "UNKNOWN-APPLICATION",
+      "pid": "1234",
+      "language": "java"
+    },
+    "package$": "net.explorviz.sampleApplication",
+    "class$": "Main$ApplicationTask",
+    "method": "run"
+  },
+  {
+    "landscapeToken": "samplelandscape",
+    "timestamp": "1590232993350",
+    "node": {
+      "ipAddress": "1.2.3.4",
+      "hostName": "testhost"
+    },
+    "application": {
+      "name": "UNKNOWN-APPLICATION",
+      "pid": "1234",
+      "language": "java"
+    },
+    "package$": "net.explorviz.sampleApplication.application",
+    "class$": "JavaExample",
+    "method": "start"
+  },
+  {
+    "landscapeToken": "samplelandscape",
+    "timestamp": "1590232993351",
+    "node": {
+      "ipAddress": "1.2.3.4",
+      "hostName": "testhost"
+    },
+    "application": {
+      "name": "UNKNOWN-APPLICATION",
+      "pid": "1234",
+      "language": "java"
+    },
+    "package$": "net.explorviz.sampleApplication.application.math",
+    "class$": "Fibonacci",
+    "method": "calculate"
+  },
+  {
+    "landscapeToken": "samplelandscape",
+    "timestamp": "1590232993352",
+    "node": {
+      "ipAddress": "1.2.3.4",
+      "hostName": "testhost"
+    },
+    "application": {
+      "name": "UNKNOWN-APPLICATION",
+      "pid": "1234",
+      "language": "java"
+    },
+    "package$": "net.explorviz.sampleApplication.database",
+    "class$": "JDBCExample",
+    "method": "start"
+  }
+]
