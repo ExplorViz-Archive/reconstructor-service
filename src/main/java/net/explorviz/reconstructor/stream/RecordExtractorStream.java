@@ -4,6 +4,7 @@ import java.util.Properties;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import net.explorviz.landscape.flat.LandscapeRecord;
+import net.explorviz.reconstructor.stream.util.EventThroughputLogger;
 import net.explorviz.trace.EVSpan;
 import net.explorviz.trace.Trace;
 import org.apache.kafka.common.serialization.Serdes;
@@ -25,7 +26,7 @@ import org.slf4j.LoggerFactory;
 public class RecordExtractorStream {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(RecordExtractorStream.class);
-
+  private final EventThroughputLogger tpLogger;
   private final Properties streamsConfig;
 
   private Topology topology;
@@ -40,10 +41,10 @@ public class RecordExtractorStream {
                                SpanToRecordConverter converter) {
     this.converter = converter;
     this.kafkaHelper = kafkaHelper;
-
     this.streamsConfig = kafkaHelper.newDefaultStreamProperties();
 
     this.topology = buildTopology();
+    this.tpLogger = new EventThroughputLogger(LOGGER);
   }
 
   public Topology getTopology() {
@@ -69,7 +70,7 @@ public class RecordExtractorStream {
           return new KeyValue<>(record.getLandscapeToken(), record);
         });
 
-
+    recordKStream.peek((k,v) -> tpLogger.logEvent());
 
     recordKStream
         .to(kafkaHelper.getTopicRecords(),

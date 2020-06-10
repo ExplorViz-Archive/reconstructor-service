@@ -29,9 +29,9 @@ repositories {
 dependencies {
   implementation 'io.quarkus:quarkus-kafka-streams'
   implementation 'io.quarkus:quarkus-kafka-client'
-  implementation 'org.apache.camel.quarkus:camel-quarkus-kafka'
+
   implementation enforcedPlatform("${quarkusPlatformGroupId}:${quarkusPlatformArtifactId}:${quarkusPlatformVersion}")
-  implementation 'io.quarkus:quarkus-resteasy'
+
 
   implementation group: 'com.datastax.oss', name: 'java-driver-core', version: '4.6.1'
   implementation group: 'com.datastax.oss', name: 'java-driver-query-builder', version: '4.6.1'
