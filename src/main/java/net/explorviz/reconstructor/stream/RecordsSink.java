@@ -3,7 +3,7 @@ package net.explorviz.reconstructor.stream;
 import java.util.Properties;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import net.explorviz.landscape.flat.LandscapeRecord;
+import net.explorviz.avro.landscape.flat.LandscapeRecord;
 import net.explorviz.reconstructor.peristence.PersistingException;
 import net.explorviz.reconstructor.peristence.Repository;
 import org.apache.kafka.common.serialization.Serdes;
@@ -16,7 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Implements a stream processing sink for the extracted {@link net.explorviz.landscape.flat.LandscapeRecord}s.
+ * Implements a stream processing sink for the extracted {@link LandscapeRecord}s.
  * The records are persisted in a database for further access.
  */
 @ApplicationScoped

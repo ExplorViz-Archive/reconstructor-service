@@ -3,10 +3,10 @@ package net.explorviz.reconstructor.stream;
 import java.util.Properties;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import net.explorviz.landscape.flat.LandscapeRecord;
+import net.explorviz.avro.landscape.flat.LandscapeRecord;
 import net.explorviz.reconstructor.stream.util.EventThroughputLogger;
-import net.explorviz.trace.EVSpan;
-import net.explorviz.trace.Trace;
+import net.explorviz.avro.EVSpan;
+import net.explorviz.avro.Trace;
 import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.streams.KafkaStreams;
 import org.apache.kafka.streams.KeyValue;
@@ -60,8 +60,10 @@ public class RecordExtractorStream {
         builder.stream(kafkaHelper.getTopicTraces(), Consumed
             .with(Serdes.String(), kafkaHelper.getAvroValueSerde()));
 
+
     // Map to spans
     KStream<String, EVSpan> spanStream = traceStream.flatMapValues(Trace::getSpanList);
+
 
     // Map to records
     KStream<String, LandscapeRecord> recordKStream =
@@ -70,7 +72,9 @@ public class RecordExtractorStream {
           return new KeyValue<>(record.getLandscapeToken(), record);
         });
 
-    recordKStream.peek((k,v) -> tpLogger.logEvent());
+    recordKStream.peek((k, v) -> LOGGER.info(v.toString()));
+
+    //recordKStream.peek((k,v) -> tpLogger.logEvent());
 
     recordKStream
         .to(kafkaHelper.getTopicRecords(),
@@ -83,7 +87,7 @@ public class RecordExtractorStream {
   public void startProcessor() {
 
     final KafkaStreams streams = new KafkaStreams(this.topology, streamsConfig);
-    streams.cleanUp();
+    //streams.cleanUp();
     streams.start();
 
     Runtime.getRuntime().addShutdownHook(new Thread(streams::close));

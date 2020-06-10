@@ -6,7 +6,7 @@ import com.datastax.oss.driver.api.core.type.codec.MappingCodec;
 import com.datastax.oss.driver.api.core.type.codec.TypeCodec;
 import com.datastax.oss.driver.api.core.type.reflect.GenericType;
 import edu.umd.cs.findbugs.annotations.Nullable;
-import net.explorviz.landscape.flat.Node;
+import net.explorviz.avro.landscape.flat.Node;
 import net.explorviz.reconstructor.peristence.cassandra.DBHelper;
 
 public class NodeCodec extends MappingCodec<UdtValue, Node> {

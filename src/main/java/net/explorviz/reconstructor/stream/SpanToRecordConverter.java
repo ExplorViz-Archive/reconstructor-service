@@ -3,13 +3,13 @@ package net.explorviz.reconstructor.stream;
 import java.time.Instant;
 import java.util.Arrays;
 import javax.enterprise.context.ApplicationScoped;
-import net.explorviz.landscape.flat.Application;
-import net.explorviz.landscape.flat.LandscapeRecord;
-import net.explorviz.landscape.flat.Node;
-import net.explorviz.trace.EVSpan;
+import net.explorviz.avro.landscape.flat.Application;
+import net.explorviz.avro.landscape.flat.LandscapeRecord;
+import net.explorviz.avro.landscape.flat.Node;
+import net.explorviz.avro.EVSpan;
 
 /**
- * Maps {@link net.explorviz.trace.EVSpan} objects to {@link net.explorviz.landscape.flat.LandscapeRecord}
+ * Maps {@link EVSpan} objects to {@link LandscapeRecord}
  * objects by extracting the data.
  */
 @ApplicationScoped

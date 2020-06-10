@@ -1,5 +1,5 @@
 {
-  "namespace": "net.explorviz.landscape.flat",
+  "namespace": "net.explorviz.avro.landscape.flat",
   "type": "record",
   "name": "LandscapeRecord",
   "fields": [

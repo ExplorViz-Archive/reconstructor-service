@@ -8,7 +8,7 @@ import com.datastax.oss.driver.api.querybuilder.QueryBuilder;
 import com.datastax.oss.driver.api.querybuilder.term.Term;
 import java.util.Map;
 import javax.enterprise.context.ApplicationScoped;
-import net.explorviz.landscape.flat.LandscapeRecord;
+import net.explorviz.avro.landscape.flat.LandscapeRecord;
 import net.explorviz.reconstructor.peristence.PersistingException;
 import net.explorviz.reconstructor.peristence.Repository;
 import net.explorviz.reconstructor.peristence.cassandra.mapper.ValueMapper;
