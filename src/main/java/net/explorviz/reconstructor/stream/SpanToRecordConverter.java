@@ -1,4 +1,4 @@
-package net.explorviz.reconstructor;
+package net.explorviz.reconstructor.stream;
 
 import java.time.Instant;
 import java.util.Arrays;

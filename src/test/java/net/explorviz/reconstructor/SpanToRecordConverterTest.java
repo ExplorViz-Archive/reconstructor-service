@@ -4,6 +4,7 @@ import java.time.Instant;
 import net.explorviz.landscape.flat.Application;
 import net.explorviz.landscape.flat.LandscapeRecord;
 import net.explorviz.landscape.flat.Node;
+import net.explorviz.reconstructor.stream.SpanToRecordConverter;
 import net.explorviz.trace.EVSpan;
 import net.explorviz.trace.Timestamp;
 import org.junit.jupiter.api.Assertions;
