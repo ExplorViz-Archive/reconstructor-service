@@ -20,31 +20,23 @@ import org.slf4j.LoggerFactory;
  * The records are persisted in a database for further access.
  */
 @ApplicationScoped
-public class RecordsSink {
+public class RecordPersistingProcessor {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(RecordsSink.class);
-
-  private final Properties streamsConfig;
-
-  private Topology topology;
+  private static final Logger LOGGER = LoggerFactory.getLogger(RecordPersistingProcessor.class);
 
   private final KafkaHelper kafkaHelper;
 
   private final Repository<LandscapeRecord> recordRepo;
 
   @Inject
-  public RecordsSink(Repository<LandscapeRecord> repo, KafkaHelper kafkaHelper) {
+  public RecordPersistingProcessor(Repository<LandscapeRecord> repo, KafkaHelper kafkaHelper) {
     this.recordRepo = repo;
     this.kafkaHelper = kafkaHelper;
 
-    streamsConfig = kafkaHelper.newDefaultStreamProperties();
-
-    this.topology = buildTopology();
-
   }
 
-  private Topology buildTopology() {
-    StreamsBuilder builder = new StreamsBuilder();
+  public StreamsBuilder addTopology(StreamsBuilder builder) {
+
     KStream<String, LandscapeRecord> recordStream =
         builder.stream(kafkaHelper.getTopicRecords(), Consumed
             .with(Serdes.String(), kafkaHelper.getAvroValueSerde()));
@@ -58,15 +50,9 @@ public class RecordsSink {
         }
       }
     });
-    return builder.build();
+    return builder;
   }
 
-  public void startProcessor() {
-    final KafkaStreams streams = new KafkaStreams(this.topology, streamsConfig);
-    streams.cleanUp();
-    streams.start();
 
-    Runtime.getRuntime().addShutdownHook(new Thread(streams::close));
-  }
 
 }

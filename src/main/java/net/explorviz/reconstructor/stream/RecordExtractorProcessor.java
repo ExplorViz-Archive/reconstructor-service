@@ -23,13 +23,10 @@ import org.slf4j.LoggerFactory;
  * extracting structural data out of each trace's spans.
  */
 @ApplicationScoped
-public class RecordExtractorStream {
+public class RecordExtractorProcessor {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(RecordExtractorStream.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(RecordExtractorProcessor.class);
   private final EventThroughputLogger tpLogger;
-  private final Properties streamsConfig;
-
-  private Topology topology;
 
   private final KafkaHelper kafkaHelper;
 
@@ -37,23 +34,16 @@ public class RecordExtractorStream {
 
 
   @Inject
-  public RecordExtractorStream(KafkaHelper kafkaHelper,
-                               SpanToRecordConverter converter) {
+  public RecordExtractorProcessor(KafkaHelper kafkaHelper,
+                                  SpanToRecordConverter converter) {
     this.converter = converter;
     this.kafkaHelper = kafkaHelper;
-    this.streamsConfig = kafkaHelper.newDefaultStreamProperties();
 
-    this.topology = buildTopology();
     this.tpLogger = new EventThroughputLogger(LOGGER);
   }
 
-  public Topology getTopology() {
-    return topology;
-  }
 
-  private Topology buildTopology() {
-
-    StreamsBuilder builder = new StreamsBuilder();
+  public StreamsBuilder addTopology(StreamsBuilder builder) {
 
     // Trace stream
     KStream<String, Trace> traceStream =
@@ -80,18 +70,9 @@ public class RecordExtractorStream {
         .to(kafkaHelper.getTopicRecords(),
             Produced.with(Serdes.String(), kafkaHelper.getAvroValueSerde()));
 
-    return builder.build();
+    return builder;
   }
 
-
-  public void startProcessor() {
-
-    final KafkaStreams streams = new KafkaStreams(this.topology, streamsConfig);
-    //streams.cleanUp();
-    streams.start();
-
-    Runtime.getRuntime().addShutdownHook(new Thread(streams::close));
-  }
 
 
 
