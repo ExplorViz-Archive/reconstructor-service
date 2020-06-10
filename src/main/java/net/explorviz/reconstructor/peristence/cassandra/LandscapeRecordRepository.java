@@ -47,6 +47,9 @@ public class LandscapeRecordRepository implements Repository<LandscapeRecord> {
             .build();
     try {
       this.db.getSession().execute(insertStmt);
+      if (LOGGER.isInfoEnabled()) {
+        LOGGER.info("Inserted new record for landscape token {}", item.getLandscapeToken());
+      }
     } catch (AllNodesFailedException e) {
       if (LOGGER.isErrorEnabled()) {
         LOGGER.error("Failed to insert new record: Database unreachable");
