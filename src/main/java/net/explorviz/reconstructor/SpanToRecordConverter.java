@@ -2,14 +2,10 @@ package net.explorviz.reconstructor;
 
 import java.time.Instant;
 import java.util.Arrays;
-import java.util.Optional;
 import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
 import net.explorviz.landscape.flat.Application;
 import net.explorviz.landscape.flat.LandscapeRecord;
 import net.explorviz.landscape.flat.Node;
-import net.explorviz.reconstructor.verifier.InvalidSpanException;
-import net.explorviz.reconstructor.verifier.SpanValidator;
 import net.explorviz.trace.EVSpan;
 
 /**
@@ -20,24 +16,14 @@ import net.explorviz.trace.EVSpan;
 public class SpanToRecordConverter {
 
 
-  private SpanValidator validator;
-
-  @Inject
-  public SpanToRecordConverter(SpanValidator validator) {
-    this.validator = validator;
-  }
-
   /**
    * Converts a {@link EVSpan} to a {@link LandscapeRecord} using the structural information
    * given in the span.
    *
    * @param span the span
    * @return a records containing the structural information of the span
-   * @throws InvalidSpanException if the span could not be converted
    */
-  public LandscapeRecord toRecord(EVSpan span) throws InvalidSpanException {
-
-    EVSpan validated = validator.validate(span);
+  public LandscapeRecord toRecord(EVSpan span) {
 
     // Create new builder
     LandscapeRecord.Builder recordBuilder =
@@ -76,17 +62,6 @@ public class SpanToRecordConverter {
 
 
     return recordBuilder.build();
-
-  }
-
-
-
-  /**
-   * Throws if the given span is invalid and can't be converted into a valid record
-   *
-   * @param span the span
-   */
-  private void validate(EVSpan span) throws InvalidSpanException {
 
   }
 

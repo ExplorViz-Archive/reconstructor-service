@@ -4,8 +4,6 @@ import java.time.Instant;
 import net.explorviz.landscape.flat.Application;
 import net.explorviz.landscape.flat.LandscapeRecord;
 import net.explorviz.landscape.flat.Node;
-import net.explorviz.reconstructor.verifier.InvalidSpanException;
-import net.explorviz.reconstructor.verifier.StrictValidator;
 import net.explorviz.trace.EVSpan;
 import net.explorviz.trace.Timestamp;
 import org.junit.jupiter.api.Assertions;
@@ -21,7 +19,7 @@ class SpanToRecordConverterTest {
 
   @BeforeEach
   void setUp() {
-    converter = new SpanToRecordConverter(new StrictValidator());
+    converter = new SpanToRecordConverter();
     Instant now = Instant.now();
     long duration = 1000L;
     long end = now.toEpochMilli() + duration;
@@ -62,7 +60,7 @@ class SpanToRecordConverterTest {
   }
 
   @Test
-  public void convert() throws InvalidSpanException {
+  public void convert()  {
     LandscapeRecord got = converter.toRecord(span);
     Assertions.assertEquals(got, record, "Converted records does not match expected");
   }

@@ -7,7 +7,6 @@ import java.util.Map;
 import java.util.Properties;
 import javax.enterprise.context.ApplicationScoped;
 import net.explorviz.landscape.flat.LandscapeRecord;
-import net.explorviz.reconstructor.verifier.InvalidSpanException;
 import net.explorviz.trace.EVSpan;
 import net.explorviz.trace.Trace;
 import org.apache.avro.specific.SpecificRecord;
@@ -65,16 +64,8 @@ public class RecordExtractorStream {
     KStream<String, EVSpan> spanStream = traceStream.flatMapValues(Trace::getSpanList);
 
     // Map to records
-    KStream<String, LandscapeRecord> recordKStream = spanStream.mapValues(s -> {
-      try {
-        return converter.toRecord(s);
-      } catch (InvalidSpanException e) {
-        if (LOGGER.isWarnEnabled()) {
-          LOGGER.warn("Invalid span not converted: {} \n Span: {}", e.getMessage(), e.getSpan());
-        }
-      }
-      return null;
-    }).filter((k, r) -> r != null);
+    KStream<String, LandscapeRecord> recordKStream =
+        spanStream.mapValues(s -> converter.toRecord(s));
 
 
     /*
