@@ -6,8 +6,7 @@ import com.fasterxml.jackson.databind.json.JsonMapper;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
-import net.explorviz.landscape.flat.LandscapeRecord;
-
+import net.explorviz.avro.landscape.flat.LandscapeRecord;
 
 /**
  * Loads sample {@link LandscapeRecord} objects out of a json file located
