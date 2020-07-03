@@ -1,17 +1,14 @@
 package net.explorviz.reconstructor.stream;
 
-import java.util.Properties;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import net.explorviz.avro.landscape.flat.LandscapeRecord;
-import net.explorviz.reconstructor.stream.util.EventThroughputLogger;
 import net.explorviz.avro.EVSpan;
 import net.explorviz.avro.Trace;
+import net.explorviz.avro.landscape.flat.LandscapeRecord;
+import net.explorviz.reconstructor.stream.util.EventThroughputLogger;
 import org.apache.kafka.common.serialization.Serdes;
-import org.apache.kafka.streams.KafkaStreams;
 import org.apache.kafka.streams.KeyValue;
 import org.apache.kafka.streams.StreamsBuilder;
-import org.apache.kafka.streams.Topology;
 import org.apache.kafka.streams.kstream.Consumed;
 import org.apache.kafka.streams.kstream.KStream;
 import org.apache.kafka.streams.kstream.Produced;
