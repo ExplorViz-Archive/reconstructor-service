@@ -1,15 +1,15 @@
 pluginManagement {
-    repositories {
-        mavenLocal()
-        mavenCentral()
-        gradlePluginPortal()
-        maven {
-            name "JCenter Gradle Plugins"
-            url  "https://dl.bintray.com/gradle/gradle-plugins"
-        }
+  repositories {
+    mavenLocal()
+    mavenCentral()
+    gradlePluginPortal()
+    maven {
+      name "JCenter Gradle Plugins"
+      url "https://dl.bintray.com/gradle/gradle-plugins"
     }
-    plugins {
-      id 'io.quarkus' version "${quarkusPluginVersion}"
-    }
+  }
+  plugins {
+    id 'io.quarkus' version "${quarkusPluginVersion}"
+  }
 }
-rootProject.name='explorviz-reconstructor-service'
+rootProject.name = 'reconstructor-service'

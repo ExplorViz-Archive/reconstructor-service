@@ -1,13 +1,9 @@
 plugins {
   id 'java'
   id 'io.quarkus'
-  id 'idea'
   id 'com.adarshr.test-logger' version '2.1.0'
   id "com.commercehub.gradle.plugin.avro" version "0.21.0"
 }
-
-// Avro generator
-apply plugin: "com.commercehub.gradle.plugin.avro"
 
 repositories {
   mavenLocal()
@@ -29,7 +25,6 @@ dependencies {
 
   implementation enforcedPlatform("${quarkusPlatformGroupId}:${quarkusPlatformArtifactId}:${quarkusPlatformVersion}")
 
-
   implementation group: 'com.datastax.oss', name: 'java-driver-core', version: '4.6.1'
   implementation group: 'com.datastax.oss', name: 'java-driver-query-builder', version: '4.6.1'
   implementation group: 'org.apache.avro', name: 'avro', version: '1.9.2'
@@ -40,9 +35,8 @@ dependencies {
   testImplementation 'io.quarkus:quarkus-junit5'
   testImplementation 'io.rest-assured:rest-assured'
   testImplementation "org.mockito:mockito-core:2.+"
+
   testImplementation group: 'org.cassandraunit', name: 'cassandra-unit', version: '4.3.1.0'
-
-
 }
 group 'net.explorviz'
 version '1.0.0-SNAPSHOT'
@@ -65,8 +59,3 @@ test {
   systemProperty "java.util.logging.manager", "org.jboss.logmanager.LogManager"
 }
 
-idea {
-  module {
-    downloadJavadoc = true
-  }
-}
