@@ -16,14 +16,18 @@ plugins {
 // Avro generator
 apply plugin: "com.commercehub.gradle.plugin.avro"
 
-
-
 repositories {
   mavenLocal()
   mavenCentral()
   maven {
     url "https://packages.confluent.io/maven/"
   }
+}
+
+// Fix: com.datastax.oss:* uses old, mandatory Groovy version
+configurations.all {
+  resolutionStrategy.force group: 'org.codehaus.groovy', name: 'groovy-json', version: '2.5.7'
+  resolutionStrategy.force group: 'org.codehaus.groovy', name: 'groovy', version: '2.5.7'
 }
 
 dependencies {
