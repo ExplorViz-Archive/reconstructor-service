@@ -8,8 +8,6 @@ import java.io.InputStream;
 import java.util.List;
 import net.explorviz.avro.landscape.flat.LandscapeRecord;
 
-
-
 /**
  * Loads sample {@link LandscapeRecord} objects out of a json file located
  * in the resources directory. Used for testing/debugging only.

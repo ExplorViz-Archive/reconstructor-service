@@ -1,12 +1,12 @@
 package net.explorviz.reconstructor;
 
 import java.time.Instant;
+import net.explorviz.avro.EVSpan;
+import net.explorviz.avro.Timestamp;
 import net.explorviz.avro.landscape.flat.Application;
 import net.explorviz.avro.landscape.flat.LandscapeRecord;
 import net.explorviz.avro.landscape.flat.Node;
 import net.explorviz.reconstructor.stream.SpanToRecordConverter;
-import net.explorviz.avro.EVSpan;
-import net.explorviz.avro.Timestamp;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
