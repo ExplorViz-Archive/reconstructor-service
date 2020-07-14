@@ -17,4 +17,4 @@ spec:
       containers:
         - name: explorviz-adapter-service
           image: explorviz/reconstructor-service:latest
-	  imagePullPolicy: IfNotPresent
+          imagePullPolicy: IfNotPresent
