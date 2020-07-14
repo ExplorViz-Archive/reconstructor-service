@@ -15,5 +15,6 @@ spec:
         app: explorviz-reconstructor-service
     spec:
       containers:
-      - name: explorviz-adapter-service
-        image: localhost:32000/explorviz/explorviz-reconstructor-service:latest
+        - name: explorviz-adapter-service
+          image: explorviz/reconstructor-service:latest
+	  imagePullPolicy: IfNotPresent
