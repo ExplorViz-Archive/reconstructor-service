@@ -6,8 +6,7 @@ import com.fasterxml.jackson.databind.json.JsonMapper;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
-import net.explorviz.landscape.flat.LandscapeRecord;
-
+import net.explorviz.avro.landscape.flat.LandscapeRecord;
 
 /**
  * Loads sample {@link LandscapeRecord} objects out of a json file located
@@ -32,7 +31,7 @@ public final class SampleLoaderUtil {
         SampleLoaderUtil.class.getClassLoader().getResourceAsStream(SIMPLE);
 
     ObjectMapper mapper = new JsonMapper();
-    return mapper.readValue(recordInputStream, new TypeReference<List<LandscapeRecord>>() {
+    return mapper.readValue(recordInputStream, new TypeReference<>() {
     });
   }
 

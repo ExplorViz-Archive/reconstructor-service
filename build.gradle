@@ -1,22 +1,9 @@
-buildscript {
-  repositories {
-    jcenter()
-  }
-  dependencies {
-    classpath "com.commercehub.gradle.plugin:gradle-avro-plugin:0.19.1"
-  }
-}
-
 plugins {
   id 'java'
   id 'io.quarkus'
-  id 'idea'
+  id 'com.adarshr.test-logger' version '2.1.0'
+  id "com.commercehub.gradle.plugin.avro" version "0.21.0"
 }
-
-// Avro generator
-apply plugin: "com.commercehub.gradle.plugin.avro"
-
-
 
 repositories {
   mavenLocal()
@@ -26,12 +13,17 @@ repositories {
   }
 }
 
+// Fix: com.datastax.oss:* uses old, mandatory Groovy version
+configurations.all {
+  resolutionStrategy.force group: 'org.codehaus.groovy', name: 'groovy-json', version: '2.5.7'
+  resolutionStrategy.force group: 'org.codehaus.groovy', name: 'groovy', version: '2.5.7'
+}
+
 dependencies {
   implementation 'io.quarkus:quarkus-kafka-streams'
   implementation 'io.quarkus:quarkus-kafka-client'
 
   implementation enforcedPlatform("${quarkusPlatformGroupId}:${quarkusPlatformArtifactId}:${quarkusPlatformVersion}")
-
 
   implementation group: 'com.datastax.oss', name: 'java-driver-core', version: '4.6.1'
   implementation group: 'com.datastax.oss', name: 'java-driver-query-builder', version: '4.6.1'
@@ -43,9 +35,8 @@ dependencies {
   testImplementation 'io.quarkus:quarkus-junit5'
   testImplementation 'io.rest-assured:rest-assured'
   testImplementation "org.mockito:mockito-core:2.+"
+
   testImplementation group: 'org.cassandraunit', name: 'cassandra-unit', version: '4.3.1.0'
-
-
 }
 group 'net.explorviz'
 version '1.0.0-SNAPSHOT'
@@ -66,10 +57,4 @@ java {
 
 test {
   systemProperty "java.util.logging.manager", "org.jboss.logmanager.LogManager"
-}
-
-idea {
-  module {
-    downloadJavadoc = true
-  }
 }
