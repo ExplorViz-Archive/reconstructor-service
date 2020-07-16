@@ -6,4 +6,4 @@ docker build -f src/main/docker/Dockerfile.jvm -t explorviz/reconstructor-servic
 
 kind load docker-image explorviz/reconstructor-service-jvm:latest
 
-kubectl apply -f manifest.yml
+kubectl apply --namespace=explorviz-dev -f manifest.yml
