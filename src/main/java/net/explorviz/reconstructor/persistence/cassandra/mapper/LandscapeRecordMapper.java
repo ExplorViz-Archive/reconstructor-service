@@ -1,4 +1,4 @@
-package net.explorviz.reconstructor.peristence.cassandra.mapper;
+package net.explorviz.reconstructor.persistence.cassandra.mapper;
 
 import com.datastax.oss.driver.api.core.cql.Row;
 import com.datastax.oss.driver.api.core.type.codec.registry.CodecRegistry;
@@ -11,25 +11,27 @@ import javax.inject.Inject;
 import net.explorviz.avro.landscape.flat.Application;
 import net.explorviz.avro.landscape.flat.LandscapeRecord;
 import net.explorviz.avro.landscape.flat.Node;
-import net.explorviz.reconstructor.peristence.cassandra.DBHelper;
+import net.explorviz.reconstructor.persistence.cassandra.DBHelper;
 
 @ApplicationScoped
 public class LandscapeRecordMapper implements ValueMapper<LandscapeRecord> {
 
-  private CodecRegistry codecRegistry;
+  private final CodecRegistry codecRegistry;
 
   @Inject
-  public LandscapeRecordMapper(DBHelper db) {
+  public LandscapeRecordMapper(final DBHelper db) {
     this.codecRegistry = db.getCodecRegistry();
   }
 
   @Override
-  public Map<String, Term> toMap(LandscapeRecord item) {
-    Map<String, Term> map = new HashMap<>();
+  public Map<String, Term> toMap(final LandscapeRecord item) {
+    final Map<String, Term> map = new HashMap<>();
     map.put(DBHelper.COL_TOKEN, QueryBuilder.literal(item.getLandscapeToken()));
     map.put(DBHelper.COL_TIMESTAMP, QueryBuilder.literal(item.getTimestamp()));
-    map.put(DBHelper.COL_NODE, QueryBuilder.literal(item.getNode(), codecRegistry));
-    map.put(DBHelper.COL_APPLICATION, QueryBuilder.literal(item.getApplication(), codecRegistry));
+    map.put(DBHelper.COL_HASH_CODE, QueryBuilder.literal(item.getHashCode()));
+    map.put(DBHelper.COL_NODE, QueryBuilder.literal(item.getNode(), this.codecRegistry));
+    map.put(DBHelper.COL_APPLICATION,
+        QueryBuilder.literal(item.getApplication(), this.codecRegistry));
     map.put(DBHelper.COL_PACKAGE, QueryBuilder.literal(item.getPackage$()));
     map.put(DBHelper.COL_CLASS, QueryBuilder.literal(item.getClass$()));
     map.put(DBHelper.COL_METHOD, QueryBuilder.literal(item.getMethod()));
@@ -37,11 +39,12 @@ public class LandscapeRecordMapper implements ValueMapper<LandscapeRecord> {
   }
 
   @Override
-  public LandscapeRecord fromRow(Row row) {
+  public LandscapeRecord fromRow(final Row row) {
 
     return LandscapeRecord.newBuilder()
         .setLandscapeToken(row.getString(DBHelper.COL_TOKEN))
         .setTimestamp(row.getLong(DBHelper.COL_TIMESTAMP))
+        .setHashCode(row.getString(DBHelper.COL_HASH_CODE))
         .setNode(row.get(DBHelper.COL_NODE, Node.class))
         .setApplication(row.get(DBHelper.COL_APPLICATION, Application.class))
         .setPackage$(row.getString(DBHelper.COL_PACKAGE))

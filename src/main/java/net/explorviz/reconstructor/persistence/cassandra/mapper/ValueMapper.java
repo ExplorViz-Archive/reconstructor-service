@@ -1,4 +1,4 @@
-package net.explorviz.reconstructor.peristence.cassandra.mapper;
+package net.explorviz.reconstructor.persistence.cassandra.mapper;
 
 import com.datastax.oss.driver.api.core.cql.Row;
 import com.datastax.oss.driver.api.querybuilder.term.Term;

@@ -3,6 +3,7 @@ package net.explorviz.reconstructor.stream;
 import java.util.Properties;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import net.explorviz.reconstructor.stream.util.KafkaHelper;
 import org.apache.kafka.streams.KafkaStreams;
 import org.apache.kafka.streams.StreamsBuilder;
 import org.apache.kafka.streams.Topology;
@@ -10,40 +11,40 @@ import org.apache.kafka.streams.Topology;
 @ApplicationScoped
 public class ReconstructionStream {
 
-  private KafkaHelper kHelper;
+  private final KafkaHelper kHelper;
 
   private final Topology topology;
 
-  private Properties props;
+  private final Properties props;
 
   private final KafkaStreams stream;
 
-  private RecordPersistingProcessor recordPersistingProcessor;
-  private RecordExtractorProcessor recordExtractorProcessor;
+  private final RecordPersistingProcessor recordPersistingProcessor;
+  private final RecordExtractorProcessor recordExtractorProcessor;
 
   @Inject
-  public ReconstructionStream(KafkaHelper kHelper,
-                              RecordExtractorProcessor recordExtractorProcessor,
-                              RecordPersistingProcessor recordPersistingProcessor) {
+  public ReconstructionStream(final KafkaHelper kHelper,
+      final RecordExtractorProcessor recordExtractorProcessor,
+      final RecordPersistingProcessor recordPersistingProcessor) {
     this.kHelper = kHelper;
     this.recordPersistingProcessor = recordPersistingProcessor;
     this.recordExtractorProcessor = recordExtractorProcessor;
 
-    this.topology = buildTopology();
-    props = kHelper.newDefaultStreamProperties();
-    stream = new KafkaStreams(this.topology, this.props);
+    this.topology = this.buildTopology();
+    this.props = kHelper.newDefaultStreamProperties();
+    this.stream = new KafkaStreams(this.topology, this.props);
   }
 
   public KafkaStreams getStream() {
-    return stream;
+    return this.stream;
   }
 
   private Topology buildTopology() {
-    StreamsBuilder builder = new StreamsBuilder();
+    final StreamsBuilder builder = new StreamsBuilder();
 
 
-    recordExtractorProcessor.addTopology(builder);
-    recordPersistingProcessor.addTopology(builder);
+    this.recordExtractorProcessor.addTopology(builder);
+    this.recordPersistingProcessor.addTopology(builder);
 
     return builder.build();
   }

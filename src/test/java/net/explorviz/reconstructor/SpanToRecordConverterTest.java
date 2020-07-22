@@ -20,36 +20,33 @@ class SpanToRecordConverterTest {
 
   @BeforeEach
   void setUp() {
-    converter = new SpanToRecordConverter();
-    Instant now = Instant.now();
-    long duration = 1000L;
-    long end = now.toEpochMilli() + duration;
-    String token = "tok";
-    String hostname = "Host";
-    String hostIp = "1.2.3.4";
-    String appName = "Test App";
-    String appPid = "1234";
-    String appLang = "java";
+    this.converter = new SpanToRecordConverter();
+    final Instant now = Instant.now();
+    final String token = "tok";
+    final String hostname = "Host";
+    final String hostIp = "1.2.3.4";
+    final String appName = "Test App";
+    final String appPid = "1234";
+    final String appLang = "java";
+    final String hashCode = "a387988168c607be0b2d886e75c85cb0f2f44ed41d45a1d800cdc857c04e98ae";
 
 
-    span = EVSpan.newBuilder()
-        .setTraceId("trace")
-        .setRequestCount(12)
+    this.span = EVSpan.newBuilder()
         .setSpanId("id")
         .setLandscapeToken(token)
-        .setStartTime(new Timestamp(now.getEpochSecond(), now.getNano()))
-        .setEndTime(end)
-        .setDuration(duration)
+        .setHashCode(hashCode)
+        .setTimestamp(new Timestamp(now.getEpochSecond(), now.getNano()))
         .setHostname(hostname)
         .setHostIpAddress(hostIp)
         .setAppName(appName)
         .setAppPid(appPid)
         .setAppLanguage(appLang)
-        .setOperationName("foo.bar.TestClass.testMethod()")
+        .setFullyQualifiedOperationName("foo.bar.TestClass.testMethod()")
         .build();
 
-    record = LandscapeRecord.newBuilder()
+    this.record = LandscapeRecord.newBuilder()
         .setLandscapeToken(token)
+        .setHashCode(hashCode)
         .setTimestamp(now.toEpochMilli())
         .setNode(new Node(hostIp, hostname))
         .setApplication(new Application(appName, appPid, appLang))
@@ -62,8 +59,8 @@ class SpanToRecordConverterTest {
 
   @Test
   public void convert() {
-    LandscapeRecord got = converter.toRecord(span);
-    Assertions.assertEquals(got, record, "Converted records does not match expected");
+    final LandscapeRecord got = this.converter.toRecord(this.span);
+    Assertions.assertEquals(got, this.record, "Converted records does not match expected");
   }
 
 }

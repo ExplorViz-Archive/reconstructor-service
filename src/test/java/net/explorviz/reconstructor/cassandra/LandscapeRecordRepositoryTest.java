@@ -7,17 +7,17 @@ import net.explorviz.avro.landscape.flat.Application;
 import net.explorviz.avro.landscape.flat.LandscapeRecord;
 import net.explorviz.avro.landscape.flat.Node;
 import net.explorviz.reconstructor.SampleLoaderUtil;
-import net.explorviz.reconstructor.peristence.PersistingException;
-import net.explorviz.reconstructor.peristence.cassandra.DBHelper;
-import net.explorviz.reconstructor.peristence.cassandra.LandscapeRecordRepository;
-import net.explorviz.reconstructor.peristence.cassandra.mapper.LandscapeRecordMapper;
+import net.explorviz.reconstructor.persistence.PersistingException;
+import net.explorviz.reconstructor.persistence.cassandra.DBHelper;
+import net.explorviz.reconstructor.persistence.cassandra.LandscapeRecordRepository;
+import net.explorviz.reconstructor.persistence.cassandra.mapper.LandscapeRecordMapper;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 /**
- * Tests for the {@link LandscapeRecordRepository}. The test are run against an in-memory
- * Cassandra database.
+ * Tests for the {@link LandscapeRecordRepository}. The test are run against an in-memory Cassandra
+ * database.
  */
 class LandscapeRecordRepositoryTest extends CassandraTest {
 
@@ -29,7 +29,7 @@ class LandscapeRecordRepositoryTest extends CassandraTest {
   @BeforeEach
   void setUp() {
     this.db.initialize();
-    mapper = new LandscapeRecordMapper(this.db);
+    this.mapper = new LandscapeRecordMapper(this.db);
     this.repository = new LandscapeRecordRepository(this.db, this.mapper);
   }
 
@@ -37,67 +37,71 @@ class LandscapeRecordRepositoryTest extends CassandraTest {
 
   @Test
   void addNew() throws IOException, PersistingException {
-    Node node = new Node("0.0.0.0", "localhost");
-    Application app = new Application("SampleApplication", "1234", "java");
-    String package$ = "net.explorviz.test";
-    String class$ = "SampleClass";
-    String method = "sampleMethod()";
-    LandscapeRecord toAdd = LandscapeRecord.newBuilder()
-        .setLandscapeToken("test_token")
+    // Setup a sample LandscapeRecord object to test with
+    final Node node = new Node("0.0.0.0", "localhost");
+    final Application app = new Application("SampleApplication", "1234", "java");
+    final String package$ = "net.explorviz.test";
+    final String class$ = "SampleClass";
+    final String method = "sampleMethod()";
+    final LandscapeRecord sampleRecord = LandscapeRecord.newBuilder()
+        .setLandscapeToken("tok")
+        .setTimestamp(System.currentTimeMillis())
+        .setHashCode("3e90246268c9f235059878baa96eb9619fed65d9d4f573c01d1e30863c4afec4")
         .setNode(node)
         .setApplication(app)
-        .setTimestamp(1590231993321L)
         .setPackage$(package$)
         .setClass$(class$)
         .setMethod(method)
         .build();
 
 
-    repository.add(toAdd);
+    this.repository.add(sampleRecord);
 
     // Is inserted
-    Assertions.assertEquals(1, countAll());
+    Assertions.assertEquals(1, this.countAll());
   }
 
   @Test
   void addWithoutToken() {
-    Node node = new Node("0.0.0.0", "localhost");
-    Application app = new Application("SampleApplication", "1234", "java");
-    String package$ = "net.explorviz.test";
-    String class$ = "SampleClass";
-    String method = "sampleMethod()";
-    LandscapeRecord toAdd = LandscapeRecord.newBuilder()
+    // Setup a sample LandscapeRecord object to test with
+    final Node node = new Node("0.0.0.0", "localhost");
+    final Application app = new Application("SampleApplication", "1234", "java");
+    final String package$ = "net.explorviz.test";
+    final String class$ = "SampleClass";
+    final String method = "sampleMethod()";
+    final LandscapeRecord sampleRecord = LandscapeRecord.newBuilder()
         .setLandscapeToken("")
+        .setTimestamp(System.currentTimeMillis())
+        .setHashCode("3e90246268c9f235059878baa96eb9619fed65d9d4f573c01d1e30863c4afec4")
         .setNode(node)
         .setApplication(app)
-        .setTimestamp(1590231993321L)
         .setPackage$(package$)
         .setClass$(class$)
         .setMethod(method)
         .build();
 
-    Assertions.assertThrows(PersistingException.class, () -> repository.add(toAdd));
+    Assertions.assertThrows(PersistingException.class, () -> this.repository.add(sampleRecord));
   }
 
   @Test
   void addExisting() throws IOException, PersistingException {
-    List<LandscapeRecord> records = SampleLoaderUtil.loadSampleApplication();
-    for (LandscapeRecord r : records) {
-      repository.add(r);
+    final List<LandscapeRecord> records = SampleLoaderUtil.loadSampleApplication();
+    for (final LandscapeRecord r : records) {
+      this.repository.add(r);
     }
 
-    long before = countAll();
+    final long before = this.countAll();
     // Should not add same record twice
-    repository.add(records.get(0));
-    long after = countAll();
+    this.repository.add(records.get(0));
+    final long after = this.countAll();
     Assertions.assertEquals(before, after);
   }
 
 
   private long countAll() {
-    String q = QueryBuilder.selectFrom(DBHelper.KEYSPACE_NAME, DBHelper.RECORDS_TABLE_NAME)
+    final String q = QueryBuilder.selectFrom(DBHelper.KEYSPACE_NAME, DBHelper.RECORDS_TABLE_NAME)
         .all().countAll().toString();
-    return sess.execute(q).one().getLong(0);
+    return this.sess.execute(q).one().getLong(0);
   }
 
 

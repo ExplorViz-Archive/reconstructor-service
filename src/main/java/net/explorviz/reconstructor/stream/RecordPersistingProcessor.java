@@ -1,23 +1,21 @@
 package net.explorviz.reconstructor.stream;
 
-import java.util.Properties;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import net.explorviz.avro.landscape.flat.LandscapeRecord;
-import net.explorviz.reconstructor.peristence.PersistingException;
-import net.explorviz.reconstructor.peristence.Repository;
+import net.explorviz.reconstructor.persistence.PersistingException;
+import net.explorviz.reconstructor.persistence.Repository;
+import net.explorviz.reconstructor.stream.util.KafkaHelper;
 import org.apache.kafka.common.serialization.Serdes;
-import org.apache.kafka.streams.KafkaStreams;
 import org.apache.kafka.streams.StreamsBuilder;
-import org.apache.kafka.streams.Topology;
 import org.apache.kafka.streams.kstream.Consumed;
 import org.apache.kafka.streams.kstream.KStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Implements a stream processing sink for the extracted {@link LandscapeRecord}s.
- * The records are persisted in a database for further access.
+ * Implements a stream processing sink for the extracted {@link LandscapeRecord}s. The records are
+ * persisted in a database for further access.
  */
 @ApplicationScoped
 public class RecordPersistingProcessor {
@@ -29,22 +27,23 @@ public class RecordPersistingProcessor {
   private final Repository<LandscapeRecord> recordRepo;
 
   @Inject
-  public RecordPersistingProcessor(Repository<LandscapeRecord> repo, KafkaHelper kafkaHelper) {
+  public RecordPersistingProcessor(final Repository<LandscapeRecord> repo,
+      final KafkaHelper kafkaHelper) {
     this.recordRepo = repo;
     this.kafkaHelper = kafkaHelper;
 
   }
 
-  public StreamsBuilder addTopology(StreamsBuilder builder) {
+  public StreamsBuilder addTopology(final StreamsBuilder builder) {
 
-    KStream<String, LandscapeRecord> recordStream =
-        builder.stream(kafkaHelper.getTopicRecords(), Consumed
-            .with(Serdes.String(), kafkaHelper.getAvroValueSerde()));
+    final KStream<String, LandscapeRecord> recordStream =
+        builder.stream(this.kafkaHelper.getTopicRecords(), Consumed
+            .with(Serdes.String(), this.kafkaHelper.getAvroValueSerde()));
 
     recordStream.foreach((k, rec) -> {
       try {
-        recordRepo.add(rec);
-      } catch (PersistingException e) {
+        this.recordRepo.add(rec);
+      } catch (final PersistingException e) {
         if (LOGGER.isErrorEnabled()) {
           LOGGER.error("Failed to persist an record from stream: {0}", e);
         }
