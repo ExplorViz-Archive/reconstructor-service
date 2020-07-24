@@ -21,7 +21,7 @@ public class KafkaHelper {
   private final String applicationId;
 
   // Topic to read traces from
-  private final String topicTraces;
+  private final String topicSpans;
 
   // Topic to write/read records from/to
   private final String topicRecords;
@@ -36,13 +36,13 @@ public class KafkaHelper {
       @ConfigProperty(
           name = "quarkus.kafka-streams.bootstrap-servers") final String bootstrapServer,
       @ConfigProperty(name = "quarkus.kafka-streams.application-id") final String applicationId,
-      @ConfigProperty(name = "explorviz.kafka-streams.topics.traces") final String topicTraces,
+      @ConfigProperty(name = "explorviz.kafka-streams.topics.spans") final String topicSpans,
       @ConfigProperty(name = "explorviz.kafka-streams.topics.records") final String topicRecords,
       @ConfigProperty(name = "explorviz.schema-registry.url") final String schemaRegistryUrl,
       final SchemaRegistryClient schemaRegistryClient) {
     this.bootstrapServer = bootstrapServer;
     this.applicationId = applicationId;
-    this.topicTraces = topicTraces;
+    this.topicSpans = topicSpans;
     this.topicRecords = topicRecords;
     this.schemaRegistryUrl = schemaRegistryUrl;
     this.registry = schemaRegistryClient;
@@ -57,8 +57,8 @@ public class KafkaHelper {
     return this.applicationId;
   }
 
-  public String getTopicTraces() {
-    return this.topicTraces;
+  public String getTopicSpans() {
+    return this.topicSpans;
   }
 
   public String getTopicRecords() {

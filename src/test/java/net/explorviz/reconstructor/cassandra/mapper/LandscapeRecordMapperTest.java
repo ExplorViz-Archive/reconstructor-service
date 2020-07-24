@@ -49,6 +49,7 @@ class LandscapeRecordMapperTest extends CassandraTest {
   }
 
   @Test
+  @SuppressWarnings("unchecked")
   void toMap() {
     final Map<String, Term> map = this.mapper.toMap(this.sampleRecord);
 

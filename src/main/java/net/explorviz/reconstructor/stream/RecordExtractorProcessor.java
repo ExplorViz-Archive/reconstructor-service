@@ -44,7 +44,7 @@ public class RecordExtractorProcessor {
 
     // Span stream
     final KStream<String, EVSpan> spanStream =
-        builder.stream(this.kafkaHelper.getTopicTraces(), Consumed
+        builder.stream(this.kafkaHelper.getTopicSpans(), Consumed
             .with(Serdes.String(), this.kafkaHelper.getAvroValueSerde()));
 
     // Map to records
