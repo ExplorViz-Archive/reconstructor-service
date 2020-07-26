@@ -2,7 +2,7 @@ package net.explorviz.reconstructor.stream;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import net.explorviz.avro.EVSpan;
+import net.explorviz.avro.SpanStructure;
 import net.explorviz.avro.landscape.flat.LandscapeRecord;
 import net.explorviz.reconstructor.stream.util.EventThroughputLogger;
 import net.explorviz.reconstructor.stream.util.KafkaHelper;
@@ -43,7 +43,7 @@ public class RecordExtractorProcessor {
   public StreamsBuilder addTopology(final StreamsBuilder builder) {
 
     // Span stream
-    final KStream<String, EVSpan> spanStream =
+    final KStream<String, SpanStructure> spanStream =
         builder.stream(this.kafkaHelper.getTopicSpans(), Consumed
             .with(Serdes.String(), this.kafkaHelper.getAvroValueSerde()));
 

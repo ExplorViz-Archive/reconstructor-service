@@ -3,26 +3,26 @@ package net.explorviz.reconstructor.stream;
 import java.time.Instant;
 import java.util.Arrays;
 import javax.enterprise.context.ApplicationScoped;
-import net.explorviz.avro.EVSpan;
+import net.explorviz.avro.SpanStructure;
 import net.explorviz.avro.landscape.flat.Application;
 import net.explorviz.avro.landscape.flat.LandscapeRecord;
 import net.explorviz.avro.landscape.flat.Node;
 
 /**
- * Maps {@link EVSpan} objects to {@link LandscapeRecord} objects by extracting the data.
+ * Maps {@link SpanStructure} objects to {@link LandscapeRecord} objects by extracting the data.
  */
 @ApplicationScoped
 public class SpanToRecordConverter {
 
 
   /**
-   * Converts a {@link EVSpan} to a {@link LandscapeRecord} using the structural information given
+   * Converts a {@link SpanStructure} to a {@link LandscapeRecord} using the structural information given
    * in the span.
    *
    * @param span the span
    * @return a records containing the structural information of the span
    */
-  public LandscapeRecord toRecord(final EVSpan span) {
+  public LandscapeRecord toRecord(final SpanStructure span) {
 
     // Create new builder
     final LandscapeRecord.Builder recordBuilder =

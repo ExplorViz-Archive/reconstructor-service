@@ -1,7 +1,7 @@
 package net.explorviz.reconstructor;
 
 import java.time.Instant;
-import net.explorviz.avro.EVSpan;
+import net.explorviz.avro.SpanStructure;
 import net.explorviz.avro.Timestamp;
 import net.explorviz.avro.landscape.flat.Application;
 import net.explorviz.avro.landscape.flat.LandscapeRecord;
@@ -15,7 +15,7 @@ class SpanToRecordConverterTest {
 
   private SpanToRecordConverter converter;
 
-  private EVSpan span;
+  private SpanStructure span;
   private LandscapeRecord record;
 
   @BeforeEach
@@ -31,7 +31,7 @@ class SpanToRecordConverterTest {
     final String hashCode = "a387988168c607be0b2d886e75c85cb0f2f44ed41d45a1d800cdc857c04e98ae";
 
 
-    this.span = EVSpan.newBuilder()
+    this.span = SpanStructure.newBuilder()
         .setSpanId("id")
         .setLandscapeToken(token)
         .setHashCode(hashCode)
