@@ -31,7 +31,6 @@ public class RecordPersistingProcessor {
       final KafkaHelper kafkaHelper) {
     this.recordRepo = repo;
     this.kafkaHelper = kafkaHelper;
-
   }
 
   public StreamsBuilder addTopology(final StreamsBuilder builder) {
