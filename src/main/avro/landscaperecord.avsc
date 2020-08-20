@@ -12,6 +12,10 @@
       "type": "long"
     },
     {
+      "name": "hashCode",
+      "type": "string"
+    },
+    {
       "name": "node",
       "type": {
         "name": "Node",

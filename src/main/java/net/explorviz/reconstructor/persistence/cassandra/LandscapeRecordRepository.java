@@ -1,4 +1,4 @@
-package net.explorviz.reconstructor.peristence.cassandra;
+package net.explorviz.reconstructor.persistence.cassandra;
 
 import com.datastax.oss.driver.api.core.AllNodesFailedException;
 import com.datastax.oss.driver.api.core.cql.SimpleStatement;
@@ -9,9 +9,9 @@ import com.datastax.oss.driver.api.querybuilder.term.Term;
 import java.util.Map;
 import javax.enterprise.context.ApplicationScoped;
 import net.explorviz.avro.landscape.flat.LandscapeRecord;
-import net.explorviz.reconstructor.peristence.PersistingException;
-import net.explorviz.reconstructor.peristence.Repository;
-import net.explorviz.reconstructor.peristence.cassandra.mapper.ValueMapper;
+import net.explorviz.reconstructor.persistence.PersistingException;
+import net.explorviz.reconstructor.persistence.Repository;
+import net.explorviz.reconstructor.persistence.cassandra.mapper.ValueMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,15 +23,15 @@ public class LandscapeRecordRepository implements Repository<LandscapeRecord> {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(LandscapeRecordRepository.class);
 
-  private DBHelper db;
-  private ValueMapper<LandscapeRecord> mapper;
+  private final DBHelper db;
+  private final ValueMapper<LandscapeRecord> mapper;
 
   /**
    * Create a new repository for accessing {@link LandscapeRecord} object.
    *
    * @param db the backing Casandra db
    */
-  public LandscapeRecordRepository(DBHelper db, ValueMapper<LandscapeRecord> mapper) {
+  public LandscapeRecordRepository(final DBHelper db, final ValueMapper<LandscapeRecord> mapper) {
     this.db = db;
     db.initialize();
     this.mapper = mapper;
@@ -39,9 +39,9 @@ public class LandscapeRecordRepository implements Repository<LandscapeRecord> {
 
 
   @Override
-  public void add(LandscapeRecord item) throws PersistingException {
-    Map<String, Term> values = mapper.toMap(item);
-    SimpleStatement insertStmt =
+  public void add(final LandscapeRecord item) throws PersistingException {
+    final Map<String, Term> values = this.mapper.toMap(item);
+    final SimpleStatement insertStmt =
         QueryBuilder.insertInto(DBHelper.KEYSPACE_NAME, DBHelper.RECORDS_TABLE_NAME)
             .values(values)
             .build();
@@ -50,7 +50,7 @@ public class LandscapeRecordRepository implements Repository<LandscapeRecord> {
       if (LOGGER.isInfoEnabled()) {
         LOGGER.info("Inserted new record for landscape token {}", item.getLandscapeToken());
       }
-    } catch (AllNodesFailedException e) {
+    } catch (final AllNodesFailedException e) {
       if (LOGGER.isErrorEnabled()) {
         LOGGER.error("Failed to insert new record: Database unreachable");
       }

@@ -2,7 +2,7 @@ package net.explorviz.reconstructor.cassandra;
 
 import com.datastax.oss.driver.api.core.CqlSession;
 import java.io.IOException;
-import net.explorviz.reconstructor.peristence.cassandra.DBHelper;
+import net.explorviz.reconstructor.persistence.cassandra.DBHelper;
 import org.cassandraunit.utils.EmbeddedCassandraServerHelper;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
@@ -25,8 +25,8 @@ public class CassandraTest {
 
   @BeforeEach
   void setUpDb() {
-    sess = EmbeddedCassandraServerHelper.getSession();
-    db = new DBHelper(sess);
+    this.sess = EmbeddedCassandraServerHelper.getSession();
+    this.db = new DBHelper(this.sess);
   }
 
   @AfterEach

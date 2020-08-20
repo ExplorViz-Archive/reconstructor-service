@@ -1,4 +1,4 @@
-package net.explorviz.reconstructor.peristence.cassandra;
+package net.explorviz.reconstructor.persistence.cassandra;
 
 import com.datastax.oss.driver.api.core.CqlSession;
 import com.datastax.oss.driver.api.core.data.UdtValue;
@@ -15,18 +15,16 @@ import com.datastax.oss.driver.api.querybuilder.schema.CreateType;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import net.explorviz.avro.landscape.flat.LandscapeRecord;
-import net.explorviz.reconstructor.peristence.cassandra.mapper.ApplicationCodec;
-import net.explorviz.reconstructor.peristence.cassandra.mapper.NodeCodec;
+import net.explorviz.reconstructor.persistence.cassandra.mapper.ApplicationCodec;
+import net.explorviz.reconstructor.persistence.cassandra.mapper.NodeCodec;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Wrapper class for accessing the Cassandra database.
- * Next to providing access to the CqlSession, this class contain utility methods to initialize
- * the database.
- * This database's state by default is uninitialized. To create the necessary keyspace and tables,
- * call
- * {@link #initialize()} prior to using it.
+ * Wrapper class for accessing the Cassandra database. Next to providing access to the CqlSession,
+ * this class contain utility methods to initialize the database. This database's state by default
+ * is uninitialized. To create the necessary keyspace and tables, call {@link #initialize()} prior
+ * to using it.
  */
 @Singleton
 public class DBHelper {
@@ -46,6 +44,7 @@ public class DBHelper {
 
   public static final String COL_TIMESTAMP = "timestamp";
   public static final String COL_TOKEN = "landscape_token";
+  public static final String COL_HASH_CODE = "hash_code";
   public static final String COL_PACKAGE = "package";
   public static final String COL_CLASS = "class";
   public static final String COL_METHOD = "method";
@@ -53,89 +52,89 @@ public class DBHelper {
   public static final String COL_APPLICATION = "application";
 
 
-  private CqlSession dbSession;
+  private final CqlSession dbSession;
 
   /**
    * @param session the CqlSession
    */
   @Inject
-  public DBHelper(CqlSession session) {
+  public DBHelper(final CqlSession session) {
     this.dbSession = session;
   }
 
   public CqlSession getSession() {
-    return dbSession;
+    return this.dbSession;
   }
 
   /**
-   * Initializes the database by creating necessary schemata.
-   * This is a no-op if the database is already initalized;
+   * Initializes the database by creating necessary schemata. This is a no-op if the database is
+   * already initalized;
    */
   public void initialize() {
-    createKeySpace();
-    createLandscapeRecordTable();
-    registerCodecs();
+    this.createKeySpace();
+    this.createLandscapeRecordTable();
+    this.registerCodecs();
   }
 
   /**
-   * Creates a keyspace name "explorviz".
-   * No-op if this keyspace already exists.
+   * Creates a keyspace name "explorviz". No-op if this keyspace already exists.
    */
   private void createKeySpace() {
-    CreateKeyspace createKs = SchemaBuilder
+    final CreateKeyspace createKs = SchemaBuilder
         .createKeyspace(KEYSPACE_NAME)
         .ifNotExists()
         .withSimpleStrategy(1)
         .withDurableWrites(true);
-    dbSession.execute(createKs.build());
+    this.dbSession.execute(createKs.build());
   }
 
   public CodecRegistry getCodecRegistry() {
-    return dbSession.getContext().getCodecRegistry();
+    return this.dbSession.getContext().getCodecRegistry();
   }
 
   /**
-   * Creates the table "records" which holds all {@link LandscapeRecord} objects.
-   * No-op if this table already exists.
+   * Creates the table "records" which holds all {@link LandscapeRecord} objects. No-op if this
+   * table already exists.
    */
   private void createLandscapeRecordTable() {
 
-    CreateType createNodeUdt = SchemaBuilder
+    final CreateType createNodeUdt = SchemaBuilder
         .createType(KEYSPACE_NAME, COL_NODE)
         .ifNotExists()
         .withField(COL_NODE_NAME, DataTypes.TEXT)
         .withField(COL_NODE_IP_ADDRESS, DataTypes.TEXT);
 
-    CreateType createApplicationUdt = SchemaBuilder
+    final CreateType createApplicationUdt = SchemaBuilder
         .createType(KEYSPACE_NAME, COL_APPLICATION)
         .ifNotExists()
         .withField(COL_APP_NAME, DataTypes.TEXT)
         .withField(COL_APP_PID, DataTypes.TEXT)
         .withField(COL_APP_LANGUAGE, DataTypes.TEXT);
 
-    CreateTable createTable = SchemaBuilder
+    final CreateTable createTable = SchemaBuilder
         .createTable(KEYSPACE_NAME, RECORDS_TABLE_NAME)
         .ifNotExists()
         .withPartitionKey(COL_TOKEN, DataTypes.TEXT)
         .withClusteringColumn(COL_NODE, SchemaBuilder.udt(COL_NODE, true))
         .withClusteringColumn(COL_APPLICATION, SchemaBuilder.udt(COL_APPLICATION, true))
         .withClusteringColumn(COL_PACKAGE, DataTypes.TEXT)
+        .withClusteringColumn(COL_HASH_CODE, DataTypes.TEXT)
         .withClusteringColumn(COL_CLASS, DataTypes.TEXT)
         .withClusteringColumn(COL_METHOD, DataTypes.TEXT)
         .withColumn(COL_TIMESTAMP, DataTypes.BIGINT);
 
 
     // Create index on timestamps for efficient querying
-    CreateIndex createTSIndex = SchemaBuilder.createIndex("timestamp_index")
+    final CreateIndex createTSIndex = SchemaBuilder.createIndex("timestamp_index")
         .ifNotExists()
         .onTable(KEYSPACE_NAME, RECORDS_TABLE_NAME)
         .andColumn(COL_TIMESTAMP);
 
 
-    dbSession.execute(createNodeUdt.asCql());
-    dbSession.execute(createApplicationUdt.asCql());
-    dbSession.execute(createTable.asCql());
-    dbSession.execute(createTSIndex.asCql());
+    this.dbSession.execute(createNodeUdt.asCql());
+    this.dbSession.execute(createApplicationUdt.asCql());
+    this.dbSession.execute(createTable.asCql());
+    this.dbSession.execute(createTSIndex.asCql());
 
     if (LOGGER.isInfoEnabled()) {
       LOGGER.info("Created records table and associated types");
@@ -144,23 +143,23 @@ public class DBHelper {
   }
 
   private void registerCodecs() {
-    CodecRegistry codecRegistry = getCodecRegistry();
+    final CodecRegistry codecRegistry = this.getCodecRegistry();
 
     // Register Node coded
-    UserDefinedType nodeUdt =
-        dbSession.getMetadata().getKeyspace(KEYSPACE_NAME)
+    final UserDefinedType nodeUdt =
+        this.dbSession.getMetadata().getKeyspace(KEYSPACE_NAME)
             .flatMap(ks -> ks.getUserDefinedType(COL_NODE))
             .orElseThrow(IllegalStateException::new);
-    TypeCodec<UdtValue> nodeUdtCodec = codecRegistry.codecFor(nodeUdt);
-    NodeCodec nodeCodec = new NodeCodec(nodeUdtCodec);
+    final TypeCodec<UdtValue> nodeUdtCodec = codecRegistry.codecFor(nodeUdt);
+    final NodeCodec nodeCodec = new NodeCodec(nodeUdtCodec);
     ((MutableCodecRegistry) codecRegistry).register(nodeCodec);
 
     // Register Application codec
-    UserDefinedType applicationUdt = dbSession.getMetadata().getKeyspace(KEYSPACE_NAME)
+    final UserDefinedType applicationUdt = this.dbSession.getMetadata().getKeyspace(KEYSPACE_NAME)
         .flatMap(ks -> ks.getUserDefinedType(COL_APPLICATION))
         .orElseThrow(IllegalStateException::new);
-    TypeCodec<UdtValue> appUdtCodec = codecRegistry.codecFor(applicationUdt);
-    ApplicationCodec applicationCodec = new ApplicationCodec(appUdtCodec);
+    final TypeCodec<UdtValue> appUdtCodec = codecRegistry.codecFor(applicationUdt);
+    final ApplicationCodec applicationCodec = new ApplicationCodec(appUdtCodec);
     ((MutableCodecRegistry) codecRegistry).register(applicationCodec);
 
     if (LOGGER.isInfoEnabled()) {

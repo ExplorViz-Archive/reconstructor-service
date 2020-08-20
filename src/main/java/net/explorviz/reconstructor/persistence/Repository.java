@@ -1,4 +1,4 @@
-package net.explorviz.reconstructor.peristence;
+package net.explorviz.reconstructor.persistence;
 
 /**
  * Manages (usually persistent) access to a collection of objects.

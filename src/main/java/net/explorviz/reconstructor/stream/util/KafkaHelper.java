@@ -1,4 +1,4 @@
-package net.explorviz.reconstructor.stream;
+package net.explorviz.reconstructor.stream.util;
 
 import io.confluent.kafka.schemaregistry.client.SchemaRegistryClient;
 import io.confluent.kafka.serializers.AbstractKafkaSchemaSerDeConfig;
@@ -21,7 +21,7 @@ public class KafkaHelper {
   private final String applicationId;
 
   // Topic to read traces from
-  private final String topicTraces;
+  private final String topicSpans;
 
   // Topic to write/read records from/to
   private final String topicRecords;
@@ -33,15 +33,16 @@ public class KafkaHelper {
 
   @Inject
   public KafkaHelper(
-      @ConfigProperty(name = "quarkus.kafka-streams.bootstrap-servers") String bootstrapServer,
-      @ConfigProperty(name = "quarkus.kafka-streams.application-id") String applicationId,
-      @ConfigProperty(name = "explorviz.kafka-streams.topics.traces") String topicTraces,
-      @ConfigProperty(name = "explorviz.kafka-streams.topics.records") String topicRecords,
-      @ConfigProperty(name = "explorviz.schema-registry.url") String schemaRegistryUrl,
-      SchemaRegistryClient schemaRegistryClient) {
+      @ConfigProperty(
+          name = "quarkus.kafka-streams.bootstrap-servers") final String bootstrapServer,
+      @ConfigProperty(name = "quarkus.kafka-streams.application-id") final String applicationId,
+      @ConfigProperty(name = "explorviz.kafka-streams.topics.spans") final String topicSpans,
+      @ConfigProperty(name = "explorviz.kafka-streams.topics.records") final String topicRecords,
+      @ConfigProperty(name = "explorviz.schema-registry.url") final String schemaRegistryUrl,
+      final SchemaRegistryClient schemaRegistryClient) {
     this.bootstrapServer = bootstrapServer;
     this.applicationId = applicationId;
-    this.topicTraces = topicTraces;
+    this.topicSpans = topicSpans;
     this.topicRecords = topicRecords;
     this.schemaRegistryUrl = schemaRegistryUrl;
     this.registry = schemaRegistryClient;
@@ -49,19 +50,19 @@ public class KafkaHelper {
   }
 
   public String getBootstrapServer() {
-    return bootstrapServer;
+    return this.bootstrapServer;
   }
 
   public String getApplicationId() {
-    return applicationId;
+    return this.applicationId;
   }
 
-  public String getTopicTraces() {
-    return topicTraces;
+  public String getTopicSpans() {
+    return this.topicSpans;
   }
 
   public String getTopicRecords() {
-    return topicRecords;
+    return this.topicRecords;
   }
 
   /**
@@ -69,8 +70,8 @@ public class KafkaHelper {
    */
   public Properties newDefaultStreamProperties() {
     final Properties streamsConfig = new Properties();
-    streamsConfig.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, getBootstrapServer());
-    streamsConfig.put(StreamsConfig.APPLICATION_ID_CONFIG, getApplicationId());
+    streamsConfig.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, this.getBootstrapServer());
+    streamsConfig.put(StreamsConfig.APPLICATION_ID_CONFIG, this.getApplicationId());
     return streamsConfig;
   }
 
@@ -81,9 +82,9 @@ public class KafkaHelper {
    * @return the SerDe
    */
   public <T extends SpecificRecord> SpecificAvroSerde<T> getAvroValueSerde() {
-    final SpecificAvroSerde<T> valueSerde = new SpecificAvroSerde<>(registry);
+    final SpecificAvroSerde<T> valueSerde = new SpecificAvroSerde<>(this.registry);
     valueSerde.configure(
-        Map.of(AbstractKafkaSchemaSerDeConfig.SCHEMA_REGISTRY_URL_CONFIG, schemaRegistryUrl),
+        Map.of(AbstractKafkaSchemaSerDeConfig.SCHEMA_REGISTRY_URL_CONFIG, this.schemaRegistryUrl),
         false);
     return valueSerde;
   }

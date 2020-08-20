@@ -1,4 +1,4 @@
-package net.explorviz.reconstructor.peristence.cassandra;
+package net.explorviz.reconstructor.persistence.cassandra;
 
 import com.datastax.oss.driver.api.core.CqlSession;
 import com.datastax.oss.driver.api.core.CqlSessionBuilder;
@@ -14,18 +14,18 @@ import org.eclipse.microprofile.config.inject.ConfigProperty;
 @ApplicationScoped
 public class CassandraFactory {
 
-  private CqlSession session;
+  private final CqlSession session;
 
 
   @Inject
   public CassandraFactory(
-      @ConfigProperty(name = "explorviz.landscape.cassandra.host") String cassandraHost,
-      @ConfigProperty(name = "explorviz.landscape.cassandra.port") int cassandraPort,
-      @ConfigProperty(name = "explorviz.landscape.cassandra.datacenter") String datacenter,
-      @ConfigProperty(name = "explorviz.landscape.cassandra.username") String username,
-      @ConfigProperty(name = "explorviz.landscape.cassandra.password") String password) {
+      @ConfigProperty(name = "explorviz.landscape.cassandra.host") final String cassandraHost,
+      @ConfigProperty(name = "explorviz.landscape.cassandra.port") final int cassandraPort,
+      @ConfigProperty(name = "explorviz.landscape.cassandra.datacenter") final String datacenter,
+      @ConfigProperty(name = "explorviz.landscape.cassandra.username") final String username,
+      @ConfigProperty(name = "explorviz.landscape.cassandra.password") final String password) {
     // TODO read from config values
-    CqlSessionBuilder builder = CqlSession.builder();
+    final CqlSessionBuilder builder = CqlSession.builder();
     builder.addContactPoint(new InetSocketAddress(cassandraHost, cassandraPort));
     builder.withAuthCredentials(username, password);
     builder.withLocalDatacenter(datacenter);
