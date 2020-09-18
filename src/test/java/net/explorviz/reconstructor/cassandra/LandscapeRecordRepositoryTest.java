@@ -52,6 +52,7 @@ class LandscapeRecordRepositoryTest extends CassandraTest {
         .setPackage$(package$)
         .setClass$(class$)
         .setMethod(method)
+        .setHashCode("12345")
         .build();
 
 
@@ -77,6 +78,7 @@ class LandscapeRecordRepositoryTest extends CassandraTest {
         .setApplication(app)
         .setPackage$(package$)
         .setClass$(class$)
+        .setHashCode("12345")
         .setMethod(method)
         .build();
 

@@ -43,6 +43,7 @@ class LandscapeRecordMapperTest extends CassandraTest {
         .setPackage$(package$)
         .setClass$(class$)
         .setMethod(method)
+        .setHashCode("12345")
         .build();
 
     this.mapper = new LandscapeRecordMapper(this.db);

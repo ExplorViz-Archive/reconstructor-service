@@ -3,9 +3,10 @@ package net.explorviz.reconstructor;
 import java.time.Instant;
 import net.explorviz.avro.SpanStructure;
 import net.explorviz.avro.Timestamp;
+
 import net.explorviz.avro.landscape.flat.Application;
-import net.explorviz.avro.landscape.flat.LandscapeRecord;
 import net.explorviz.avro.landscape.flat.Node;
+import net.explorviz.avro.landscape.flat.LandscapeRecord;
 import net.explorviz.reconstructor.stream.SpanToRecordConverter;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -42,6 +43,7 @@ class SpanToRecordConverterTest {
         .setAppPid(appPid)
         .setAppLanguage(appLang)
         .setFullyQualifiedOperationName("foo.bar.TestClass.testMethod()")
+        .setHashCode("12345")
         .build();
 
     this.record = LandscapeRecord.newBuilder()
@@ -53,6 +55,7 @@ class SpanToRecordConverterTest {
         .setPackage$("foo.bar")
         .setClass$("TestClass")
         .setMethod("testMethod()")
+        .setHashCode("12345")
         .build();
 
   }
