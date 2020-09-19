@@ -50,6 +50,7 @@ public class LandscapeRecordMapper implements ValueMapper<LandscapeRecord> {
         .setPackage$(row.getString(DBHelper.COL_PACKAGE))
         .setClass$(row.getString(DBHelper.COL_CLASS))
         .setMethod(row.getString(DBHelper.COL_METHOD))
+        .setHashCode(row.getString(DBHelper.COL_HASHCODE))
         .build();
 
   }

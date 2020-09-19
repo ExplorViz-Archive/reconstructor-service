@@ -48,6 +48,7 @@ public class DBHelper {
   public static final String COL_PACKAGE = "package";
   public static final String COL_CLASS = "class";
   public static final String COL_METHOD = "method";
+  public static final String COL_HASHCODE = "hash_code";
   public static final String COL_NODE = "node";
   public static final String COL_APPLICATION = "application";
 
@@ -121,6 +122,7 @@ public class DBHelper {
         .withClusteringColumn(COL_HASH_CODE, DataTypes.TEXT)
         .withClusteringColumn(COL_CLASS, DataTypes.TEXT)
         .withClusteringColumn(COL_METHOD, DataTypes.TEXT)
+        .withClusteringColumn(COL_HASHCODE, DataTypes.TEXT)
         .withColumn(COL_TIMESTAMP, DataTypes.BIGINT);
 
 
